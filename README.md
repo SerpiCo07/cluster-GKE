@@ -9,11 +9,11 @@ This flask app is supposed to the following tasks :
  
  
  Here's a high-level overview of steps you'd follow, along with adjustments to ensure smooth interaction between GCS and your Flask application running in GKE:
-    - Containerize Your Flask Application
-    - Build and Push the Docker Image
-    - Prepare GKE for Deployment
-    - Deploy to GKE >> deployment.yaml
-    - Expose Your Application >> service.yaml
+- Containerize Your Flask Application
+- Build and Push the Docker Image
+- Prepare GKE for Deployment
+- Deploy to GKE >> deployment.yaml
+- Expose Your Application >> service.yaml
 
 Moreover, don't forget to adjust GCS and GKE for interaction :
     - Authentication :
