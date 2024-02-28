@@ -1,44 +1,67 @@
 from flask import Flask
-from google.cloud import pubsub_v1
+from google.cloud import pubsub_v1, storage
 import json
-import requests
+import os
 
-app=Flask(__name__)
-subscriber=pubsub_v1.SubscriberClient()
+app = Flask(__name__)
 
+# Initialize Pub/Sub subscriber and publisher clients
+subscriber = pubsub_v1.SubscriberClient()
+publisher = pubsub_v1.PublisherClient()
 
-#set up pub\sub subscription
+# Initialize Google Cloud Storage client
+storage_client = storage.Client()
 
-subscription_path=subscriber.subscription_path('mainproject-01','projects/mainproject-01/subscriptions/mainCluster')
+# Set up Pub/Sub subscription and topic for publishing sorted data
+subscription_path = subscriber.subscription_path('mainproject-01', 'projects/mainproject-01/subscriptions/mainCluster')
+topic_path = publisher.topic_path('mainproject-01', 'sortedDataTopic')
+
+# Name of the bucket in Google Cloud Storage
+bucket_name = 'your_bucket_name_here'
 
 def callback(message):
-    print('Received message',message.data)
-    #process the message
-    sorted_data=process_data(message.data)
-    #send the sorted data to the cloud function
-    send_to_cloud_function(sorted_data)
+    print('Received message:', message.data)
+
+    object_name = message.data.decode('utf-8')
+    file_content = download_file_from_gcs(bucket_name, object_name)
+    
+    if file_content:
+        sorted_data = process_and_sort_data(file_content)
+        publish_sorted_data_to_topic(sorted_data)
+    
     message.ack()
 
-subscriber.subscribe(subscription_path,callback=callback)
+subscriber.subscribe(subscription_path, callback=callback)
 
-#define data processing function
-
-def process_data(data):
+def download_file_from_gcs(bucket_name, object_name):
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(object_name)
     
-    #Convert data from bytes to a JSON object
-    json_data=json.loads(data.decode('utf-8'))
+    try:
+        return blob.download_as_text()
+    except Exception as e:
+        print(f"Error downloading file from GCS: {e}")
+        return None
 
-    #perform sorting or the othr processing
-    sorted_data = sort_json_data(json_data)
-    return sorted_data
-
-#define function to send data to Googel Cloud Function
-
-def send_to_cloud_function(data):
-    url="..."
-    headers={'Content-Type': 'application/json'}
-    response = requests.post(url,headers=headers,json=data)
-    print("Data sent to CLoud Function, response :",response.text)
-
+def process_and_sort_data(file_content):
+    # Assuming the file content is JSON
+    data = json.loads(file_content)
     
+    # Example sorting logic (update as needed)
+    sorted_data = sorted(data, key=lambda x: x['some_field'])
+    
+    return json.dumps(sorted_data)
 
+def publish_sorted_data_to_topic(sorted_data):
+    # Data must be a bytestring
+    data = sorted_data.encode("utf-8")
+    
+    try:
+        publish_future = publisher.publish(topic_path, data)
+        publish_future.result()  # Wait for publish to complete.
+        print(f"Data published to {topic_path}.")
+    except Exception as e:
+        print(f"Error publishing data to topic: {e}")
+
+if __name__ == '__main__':
+    app.run(debug=True)
