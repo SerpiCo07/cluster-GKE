@@ -17,7 +17,7 @@ subscription_path = subscriber.subscription_path('mainproject-01', 'projects/mai
 topic_path = publisher.topic_path('mainproject-01', 'sortedDataTopic')
 
 # Name of the bucket in Google Cloud Storage
-bucket_name = 'your_bucket_name_here'
+bucket_name = 'test-app-esteco'
 
 def callback(message):
     print('Received message:', message.data)

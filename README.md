@@ -21,3 +21,15 @@ Moreover, don't forget to adjust GCS and GKE for interaction :
         Since our application interacts with GCS, we should ensure our GKE pods have the correct permissions. With Workload Identity, we can bind Kubernetes service accounts to Google Cloud service accounts with the necessary GCS permissions.
 - Configuration :
         Manage sensitive configurations and credentials using Kubernetes Secrets or ConfigMaps, and reference these in your deployment configuration.
+## Containerize Your Flask Application
+
+Enable the following APIs:
+-Artifact Registry
+-Cloud Build
+-Google Kubernetes Engine APIs
+
+
+
+## Build and Push the Docker Image
+
+The general approach we store our container on Artifact Registry then we deploy it on Cluster from that registry 
