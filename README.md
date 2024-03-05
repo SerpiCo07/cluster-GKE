@@ -1,4 +1,4 @@
-In this documentaion we I explained step by step how to create a simple web-app usign FLASK and a cluster using GKE, then depoly the application on GKE 
+In this documentation, I have provided a step-by-step guide on how to create a simple web application using Flask and how to set up a cluster using Google Kubernetes Engine (GKE), followed by instructions on deploying the application onto GKE.
 
 # Web-app using FLASK 
 This flask app is supposed to the following tasks :
