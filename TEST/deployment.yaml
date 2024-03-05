@@ -6,14 +6,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hello
+      app: Test-gke
   template:
     metadata:
       labels:
-        app: hello
+        app: test-gke
     spec:
       containers:
-      - name: hello-app
+      - name: test-gke
         # Replace $LOCATION with your Artifact Registry location (e.g., us-west1).
         # Replace $GCLOUD_PROJECT with your project ID.
         image: europe-west12-docker.pkg.dev/mainproject-01/test-repo/test-app:first
