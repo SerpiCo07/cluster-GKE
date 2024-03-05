@@ -29,21 +29,6 @@ Enable the following APIs:
 -Google Kubernetes Engine APIs
 
 
-
-## Build and Push the Docker Image
-
-The general approach we store our container on Artifact Registry then we deploy it on Cluster from that registry 
-
-
-# Estimating the required resources to be mentioned in deployment.yaml
-
-Determining the exact resource needs of your application is an ongoing process that involves testing, observation, and adjustments based on real-world usage. Start with educated guesses based on development and testing, monitor closely in production, and refine your allocations as you gather more data.
-
-
-
-mkdir Cluster-repo
-cd Cluster-repo
-
 ## Containerizing an app with Cloud Build
 
 ```The general approach we store our container on Artifact Registry then we deploy it on Cluster from that registry ```
